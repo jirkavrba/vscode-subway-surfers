@@ -3,17 +3,10 @@
 import * as vscode from 'vscode';
 
 const videos = [
-	"7ghSziUQnhs",
-	"n_Dv4JMiwK8",
-	"xTul-1jdAG8",
-	"GTaXbH6iSFA",
-	"yOvtMNuU9gg",
-	"2xU1OQkQa3Q",
-	"ppcOfYprwIw",
-	"c0TODv-6G_A",
-	"aUOBDL9bsYo",
-	"qGa9kWREOnE",
-	"vVJuMq1CMNo"
+	"nNGQ7kMhGuQ",
+	"Tqne5J7XdPA",
+	"hs7Z0JUgDeA",
+	"iYgYfHb8gbQ"
 ];
 
 // This method is called when your extension is activated
@@ -49,10 +42,9 @@ export function activate(context: vscode.ExtensionContext) {
                 </head>
                 <body>
                     <div id="video">
-						<iframe width="300" height="600" src="https://www.youtube.com/embed/${video}?autoplay=1" frameborder="0" 
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;" 
-							sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-presentation" allowfullscreen>
-						</iframe>
+						<video autoplay muted controls width="300">
+							<source src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=100">
+						</video>
 					</div>
                 </body>
             </html>

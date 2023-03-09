@@ -1,7 +1,7 @@
 {
   "name": "subway-surfers",
   "displayName": "Subway Surfers",
-  "description": "Code boring ah hell 💀",
+  "description": "This code boring ah hell 💀",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.76.0"
@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "subway-surfers.helloWorld",
-        "title": "Hello World"
+        "command": "subway-surfers.overstimulate",
+        "title": "This code boring ah hell 💀"
       }
     ]
   },

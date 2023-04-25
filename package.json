@@ -13,6 +13,7 @@
   "main": "./dist/extension.js",
   "repository": "https://github.com/jirkavrba/vscode-subway-surfers",
   "icon": "icon.png",
+  "publisher": "jirkavrba",
   "contributes": {
     "commands": [
       {

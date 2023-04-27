@@ -2,7 +2,7 @@
   "name": "subway-surfers",
   "displayName": "Subway Surfers",
   "description": "This code boring ah hell 💀",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.76.0"
   },

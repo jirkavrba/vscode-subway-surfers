@@ -22,6 +22,7 @@
       }
     ]
   },
+  "pricing": "Free",
   "scripts": {
     "vscode:prepublish": "yarn run package",
     "compile": "webpack",

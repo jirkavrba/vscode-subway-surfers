@@ -2,72 +2,63 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 
-const subway_videos = [
-  "nNGQ7kMhGuQ",
-  "Tqne5J7XdPA",
-  "hs7Z0JUgDeA",
-  "iYgYfHb8gbQ",
+type VideoSource = {
+    label: string;
+    videos: Array<string>;
+    width: number;
+};
+
+const videoSources: Array<VideoSource> = [
+    {
+        label: "Subway Surfers",
+        videos: ["nNGQ7kMhGuQ", "Tqne5J7XdPA", "hs7Z0JUgDeA", "iYgYfHb8gbQ"],
+        width: 300,
+    },
+    {
+        label: "Minecraft Parkour",
+        videos: ["intRX7BRA90", "n_Dv4JMiwK8", "GTaXbH6iSFA", "t3SpmH9QQew"],
+        width: 600,
+    },
 ];
 
-const minecraft_videos = [
-  "intRX7BRA90",
-  "n_Dv4JMiwK8",
-  "GTaXbH6iSFA",
-  "t3SpmH9QQew",
-];
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand(
-    "subway-surfers.overstimulate",
-    () => {
-      const column = {
-        viewColumn: vscode.ViewColumn.Beside,
-        preserverFocus: true,
-      };
+    // The command has been defined in the package.json file
+    // Now provide the implementation of the command with registerCommand
+    // The commandId parameter must match the command field in package.json
+    let disposable = vscode.commands.registerCommand("subway-surfers.overstimulate", () => {
+        const column = {
+            viewColumn: vscode.ViewColumn.Beside,
+            preserverFocus: true,
+        };
 
-      const options = { enableScripts: true };
+        const options = { enableScripts: true };
 
-      const panel = vscode.window.createWebviewPanel(
-        "subway-surfers.video",
-        "This code boring ah hell",
-        column,
-        options
-      );
+        const panel = vscode.window.createWebviewPanel(
+            "subway-surfers.video",
+            "This code boring ah hell",
+            column,
+            options
+        );
 
-      let items: vscode.QuickPickItem[] = [
-        {
-          label: "Subway Surfers",
-        },
-        {
-          label: "Minecraft Parkour",
-        },
-      ];
+        const items: vscode.QuickPickItem[] = videoSources.map((source) => {
+            return {
+                label: source.label,
+                alwaysShow: true,
+            };
+        });
 
-      let videos = subway_videos;
-      let width = 300;
+        vscode.window.showQuickPick(items, { placeHolder: "Choose your overstimulation method" }).then((selection) => {
+            if (!selection) {
+                return;
+            }
 
-      vscode.window
-        .showQuickPick(items, {
-          placeHolder: "Choose your overstimulation method",
-        })
-        .then((selection) => {
-          if (!selection) return;
+            const { videos, width } = videoSources.find((source) => source.label === selection.label)!;
+            const video = videos.sort(() => Math.random() - 0.5)[0];
 
-          if (selection.label == "Subway Surfers") {
-            videos = subway_videos;
-          } else if (selection.label == "Minecraft Parkour") {
-            videos = minecraft_videos;
-            width = 600;
-          }
-
-          const video = videos.sort(() => Math.random() - 0.5)[0];
-
-          panel.reveal();
-          panel.webview.html = `
+            panel.reveal();
+            panel.webview.html = `
             <html lang="en"> 
                 <head>
                     <meta charset="utf-8"/>
@@ -93,10 +84,9 @@ export function activate(context: vscode.ExtensionContext) {
             </html>
         `;
         });
-    }
-  );
+    });
 
-  context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated

@@ -31,6 +31,13 @@ const videoSources: Array<VideoSource> = [
     }
 ];
 
+function shuffleArray(array: any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -65,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             const { videos, width } = videoSources.find((source) => source.label === selection.label)!;
-            const video = videos[Math.floor(Math.random() * videos.length)];
+            shuffleArray(videos);
 
             panel.reveal();
             // You can use es6-string-html to get code highlighting but it works poorly.
@@ -86,23 +93,26 @@ export function activate(context: vscode.ExtensionContext) {
                     </style>
                     <script>
                     const videos = ${JSON.stringify(videos)};
+                    let current = 0;
                     document.addEventListener('DOMContentLoaded', (event) => {
                         const video = document.getElementById("video-player");
                         const source = document.getElementById("video-source");
-                        const getRandomVideo = () => {
-                            return videos[Math.floor(Math.random() * videos.length)];
-                        }
-                        video.addEventListener('ended', () => {
-                            source.src = \`https://yewtu.be/latest_version?id=\${getRandomVideo()}&amp;itag=22#t=60"\`
+                        
+                        const playNext = () => {
+                            current = current < videos.length ? current + 1 : 0;
+                            source.src = \`https://yewtu.be/latest_version?id=\${videos[current]}&amp;itag=22#t=60"\`
                             video.load();
-                        });
+                        }
+                        
+                        video.addEventListener('ended', playNext);
+                        source.addEventListener('error', playNext);
                     });
                     </script>
                 </head>
                 <body>
                     <div id="video">
                         <video id="video-player" autoplay muted controls width="${width}">
-                            <source id="video-source" src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=60">
+                            <source id="video-source" src="https://yewtu.be/latest_version?id=${videos[0]}&amp;itag=22#t=60">
                         </video>
 					          </div>
                 </body>

@@ -23,6 +23,11 @@ const videoSources: Array<VideoSource> = [
         label: "Family Guy Clips",
         videos: ["y5a0ljo-ocI", "Zxl28UgHpn0", "mn-Tlb_wfjc", "fytR78K6rHs"],
         width: 600,
+    },
+    {
+      label: "Better Call Saul Clips",
+      videos: ["P0Gl0Sd7K3k", "ySs3T3tc_bQ", "XQQI72wQjEA", "gsAeYmTNL80"],
+      width: 600
     }
 ];
 

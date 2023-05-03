@@ -86,9 +86,9 @@ export function activate(context: vscode.ExtensionContext) {
                     </style>
                     <script>
                     const videos = ${JSON.stringify(videos)};
-                    document.addEventListener('DOMContentLoaded', function (event) {
+                    document.addEventListener('DOMContentLoaded', (event) => {
                         const video = document.getElementById("video-player");
-                        const source = document.getElementById("source");
+                        const source = document.getElementById("video-source");
                         const getRandomVideo = () => {
                             return videos[Math.floor(Math.random() * videos.length)];
                         }
@@ -96,13 +96,13 @@ export function activate(context: vscode.ExtensionContext) {
                             source.src = \`https://yewtu.be/latest_version?id=\${getRandomVideo()}&amp;itag=22#t=60"\`
                             video.load();
                         });
-                  });
-                  </script>
+                    });
+                    </script>
                 </head>
                 <body>
                     <div id="video">
-                        <video autoplay muted controls width="${width}">
-                            <source src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=60">
+                        <video id="video-player" autoplay muted controls width="${width}">
+                            <source id="video-source" src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=60">
                         </video>
 					          </div>
                 </body>

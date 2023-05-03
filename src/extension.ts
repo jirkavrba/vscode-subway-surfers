@@ -4,11 +4,11 @@ import * as vscode from "vscode";
 
 type VideoSource = {
     label: string;
-    videos: Array<string>;
+    videos: string[];
     width: number;
 };
 
-const videoSources: Array<VideoSource> = [
+const internalVideoSources: VideoSource[] = [
     {
         label: "Subway Surfers",
         videos: ["nNGQ7kMhGuQ", "Tqne5J7XdPA", "hs7Z0JUgDeA", "iYgYfHb8gbQ"],
@@ -34,6 +34,8 @@ const videoSources: Array<VideoSource> = [
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    const userVideoSources: VideoSource[] = vscode.workspace.getConfiguration().get('subway-surfers.customSources') || [];
+    const videoSources = internalVideoSources.concat(userVideoSources);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json

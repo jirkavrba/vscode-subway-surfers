@@ -19,6 +19,11 @@ const videoSources: Array<VideoSource> = [
         videos: ["intRX7BRA90", "n_Dv4JMiwK8", "GTaXbH6iSFA", "t3SpmH9QQew"],
         width: 600,
     },
+    {
+      label: "Better Call Saul Clips",
+      videos: ["P0Gl0Sd7K3k", "ySs3T3tc_bQ", "XQQI72wQjEA", "gsAeYmTNL80"],
+      width: 600
+    }
 ];
 
 // This method is called when your extension is activated

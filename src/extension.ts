@@ -25,9 +25,9 @@ const videoSources: Array<VideoSource> = [
         width: 600,
     },
     {
-      label: "Better Call Saul Clips",
-      videos: ["P0Gl0Sd7K3k", "ySs3T3tc_bQ", "XQQI72wQjEA", "gsAeYmTNL80"],
-      width: 600
+        label: "Better Call Saul Clips",
+        videos: ["P0Gl0Sd7K3k", "ySs3T3tc_bQ", "XQQI72wQjEA", "gsAeYmTNL80"],
+        width: 600
     }
 ];
 
@@ -65,10 +65,11 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             const { videos, width } = videoSources.find((source) => source.label === selection.label)!;
-            const video = videos.sort(() => Math.random() - 0.5)[0];
+            const video = videos[Math.floor(Math.random() * videos.length)];
 
             panel.reveal();
-            panel.webview.html = `
+            // You can use es6-string-html to get code highlighting but it works poorly.
+            panel.webview.html = /*html*/ `
             <html lang="en"> 
                 <head>
                     <meta charset="utf-8"/>
@@ -83,13 +84,27 @@ export function activate(context: vscode.ExtensionContext) {
                             height: 100%;
                         }
                     </style>
+                    <script>
+                    const videos = ${JSON.stringify(videos)};
+                    document.addEventListener('DOMContentLoaded', function (event) {
+                        const video = document.getElementById("video-player");
+                        const source = document.getElementById("source");
+                        const getRandomVideo = () => {
+                            return videos[Math.floor(Math.random() * videos.length)];
+                        }
+                        video.addEventListener('ended', () => {
+                            source.src = \`https://yewtu.be/latest_version?id=\${getRandomVideo()}&amp;itag=22#t=60"\`
+                            video.load();
+                        });
+                  });
+                  </script>
                 </head>
                 <body>
                     <div id="video">
-						<video autoplay muted controls width="${width}">
-							<source src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=100">
-						</video>
-					</div>
+                        <video autoplay muted controls width="${width}">
+                            <source src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=60">
+                        </video>
+					          </div>
                 </body>
             </html>
         `;

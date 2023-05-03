@@ -20,7 +20,43 @@
         "command": "subway-surfers.overstimulate",
         "title": "This code boring ah hell 💀"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Subway Surfers",
+      "properties": {
+        "subway-surfers.customSources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Custom sources",
+            "required": [
+              "label",
+              "videos",
+              "width"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Name of the video source"
+              },
+              "videos": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "List of Youtube ID's",
+                "default": []
+              },
+              "width": {
+                "type": "number",
+                "description": "The width you want the video to be in pixels",
+                "default": 300
+              }
+            }
+          }
+        }
+      }
+    }
   },
   "pricing": "Free",
   "scripts": {

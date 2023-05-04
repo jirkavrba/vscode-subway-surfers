@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand("subway-surfers.overstimulate", () => {
         const column = {
             viewColumn: vscode.ViewColumn.Beside,
-            preserverFocus: true,
+            preserveFocus: true,
         };
 
         const options = { enableScripts: true };

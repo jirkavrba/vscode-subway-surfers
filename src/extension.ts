@@ -71,29 +71,49 @@ export function activate(context: vscode.ExtensionContext) {
 
             panel.reveal();
             panel.webview.html = `
-            <html lang="en"> 
-                <head>
-                    <meta charset="utf-8"/>
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <style>
-                        #video {
-                            display: flex;
-                            flex-flow: column nowrap;
-                            justify-content: center;
-                            align-items: center;
-                            width: 100%;
-                            height: 100%;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div id="video">
-						<video autoplay muted controls width="${width}">
-							<source src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=100">
-						</video>
-					</div>
-                </body>
-            </html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            #video {
+                                display: flex;
+                                flex-flow: column nowrap;
+                                justify-content: center;
+                                align-items: center;
+                                width: 100%;
+                                height: 100%;
+                            }
+
+                            button {
+                                margin-top: 1em;
+                                border: 1px solid black;
+                                background-color: black;
+                                padding: 1em;
+                                border-radius: 20px;
+                                color: white;
+                                cursor: pointer;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div id="video">
+                            <video autoplay muted controls width="${width}">
+                                <source src="https://yewtu.be/latest_version?id=${video}&amp;itag=22#t=100">
+                            </video>
+                            <button>🔊 Unmute</button>
+                        </div>
+                        <script>
+                            let vid = document.querySelector("#video video")
+                            let btn = document.querySelector("button")
+
+                            btn.addEventListener("click", () => {
+                                btn.innerText = (vid.muted) ? "🔇 Mute" : "🔊 Unmute";
+                                vid.muted = !vid.muted;
+                            })
+                        </script>
+                    </body>
+                    </html>
         `;
         });
     });

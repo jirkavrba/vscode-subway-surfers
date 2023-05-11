@@ -28,16 +28,16 @@ const internalVideoSources: VideoSource[] = [
         videos: ["y5a0ljo-ocI", "Zxl28UgHpn0", "mn-Tlb_wfjc", "fytR78K6rHs"],
         width: 600,
     },
-    {
-        label: "Better Call Saul Clips",
-        videos: ["P0Gl0Sd7K3k", "ySs3T3tc_bQ", "XQQI72wQjEA", "gsAeYmTNL80"],
-        width: 600,
-    },
-    {
-        label: "Mental Outlaw",
-        videos: ["Sk2O6aOEPLM", "Lk_v6Q0YsNo", "3oPeIbpA5x8", "GR_U0G-QGA0"],
-        width: 600,
-    },
+    // {
+    //     label: "Better Call Saul Clips",
+    //     videos: ["P0Gl0Sd7K3k", "ySs3T3tc_bQ", "XQQI72wQjEA", "gsAeYmTNL80"],
+    //     width: 600,
+    // },
+    // {
+    //     label: "Mental Outlaw",
+    //     videos: ["Sk2O6aOEPLM", "Lk_v6Q0YsNo", "3oPeIbpA5x8", "GR_U0G-QGA0"],
+    //     width: 600,
+    // },
 ];
 
 // This method is called when your extension is activated

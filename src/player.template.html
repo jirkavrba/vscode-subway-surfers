@@ -1,0 +1,54 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            #video {
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+            }
+
+            button {
+                margin-top: 1em;
+                border: 1px solid black;
+                background-color: black;
+                padding: 1em;
+                border-radius: 20px;
+                color: white;
+                cursor: pointer;
+            }
+        </style>
+        <script>
+            const videos = VIDEOS;
+
+            let current = 0;
+
+            document.addEventListener("DOMContentLoaded", (event) => {
+                const video = document.getElementById("video-player");
+                const source = document.getElementById("video-source");
+
+                const playNext = () => {
+                    current = (current + 1) % videos.length;
+                    source.src = `https://yewtu.be/latest_version?id=${videos[current]}&amp;itag=22#t=60"`;
+                    video.load();
+                    video.play();
+                };
+
+                video.addEventListener("ended", playNext);
+                source.addEventListener("error", playNext);
+                playNext();
+            });
+        </script>
+    </head>
+    <body>
+        <div id="video">
+            <video id="video-player" autoplay loop muted controls width="WIDTH">
+                <source id="video-source"/>
+            </video>
+        </div>
+    </body>
+</html>

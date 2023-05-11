@@ -4,11 +4,11 @@ import * as vscode from "vscode";
 
 type VideoSource = {
     label: string;
-    videos: Array<string>;
+    videos: string[];
     width: number;
 };
 
-const videoSources: Array<VideoSource> = [
+const internalVideoSources: VideoSource[] = [
     {
         label: "Subway Surfers",
         videos: ["nNGQ7kMhGuQ", "Tqne5J7XdPA", "hs7Z0JUgDeA", "iYgYfHb8gbQ"],
@@ -41,13 +41,15 @@ function shuffleArray(array: any[]) {
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    const userVideoSources: VideoSource[] = vscode.workspace.getConfiguration().get('subway-surfers.customSources') || [];
+    const videoSources = internalVideoSources.concat(userVideoSources);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
     let disposable = vscode.commands.registerCommand("subway-surfers.overstimulate", () => {
         const column = {
             viewColumn: vscode.ViewColumn.Beside,
-            preserverFocus: true,
+            preserveFocus: true,
         };
 
         const options = { enableScripts: true };
@@ -74,8 +76,9 @@ export function activate(context: vscode.ExtensionContext) {
             const { videos, width } = videoSources.find((source) => source.label === selection.label)!;
             shuffleArray(videos);
 
-            panel.reveal();
             // You can use es6-string-html to get code highlighting but it works poorly.
+            
+            panel.reveal();
             panel.webview.html = /*html*/ `
             <html lang="en"> 
                 <head>
@@ -90,6 +93,16 @@ export function activate(context: vscode.ExtensionContext) {
                             width: 100%;
                             height: 100%;
                         }
+                        
+                        button {
+                                margin-top: 1em;
+                                border: 1px solid black;
+                                background-color: black;
+                                padding: 1em;
+                                border-radius: 20px;
+                                color: white;
+                                cursor: pointer;
+                            }
                     </style>
                     <script>
                     const videos = ${JSON.stringify(videos)};
@@ -114,7 +127,17 @@ export function activate(context: vscode.ExtensionContext) {
                         <video id="video-player" autoplay muted controls width="${width}">
                             <source id="video-source" src="https://yewtu.be/latest_version?id=${videos[0]}&amp;itag=22#t=60">
                         </video>
+                        <button>🔊 Unmute</button>
 					          </div>
+                    <script>
+                        const video = document.querySelector("#video video")
+                        const button = document.querySelector("button")
+
+                        button.addEventListener("click", () => {
+                            button.innerText = (vid.muted) ? "🔇 Mute" : "🔊 Unmute";
+                            video.muted = !video.muted;
+                        });
+                    </script>
                 </body>
             </html>
         `;

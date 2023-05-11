@@ -124,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
                 </head>
                 <body>
                     <div id="video">
-                        <video id="video-player" autoplay muted controls width="${width}">
+                        <video id="video-player" autoplay loop muted controls width="${width}">
                             <source id="video-source" src="https://yewtu.be/latest_version?id=${videos[0]}&amp;itag=22#t=60">
                         </video>
                         <button>🔊 Unmute</button>

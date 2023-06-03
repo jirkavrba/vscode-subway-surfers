@@ -38,6 +38,12 @@ const internalVideoSources: VideoSource[] = [
     //     videos: ["Sk2O6aOEPLM", "Lk_v6Q0YsNo", "3oPeIbpA5x8", "GR_U0G-QGA0"],
     //     width: 600,
     // },
+    {
+        label: "CS:GO Surfing",
+        videos : ["Lixl3-jz7k8", "3GWPJtSGm8c", "I-VQuQu2_lc"],
+        width: 600,
+        muted: true
+    }
 ];
 
 // This method is called when your extension is activated

@@ -43,7 +43,13 @@ const internalVideoSources: VideoSource[] = [
         videos : ["Lixl3-jz7k8", "3GWPJtSGm8c", "I-VQuQu2_lc"],
         width: 600,
         muted: true
-    }
+    },
+    {
+        label: "Satisfying Videos",
+        videos: ["zPhjxwTDdLY", "etp46Aca_UM", "wjQq0nSGS28", "mQGT4BzeUUc"],
+        width: 600,
+        muted: true
+    },
 ];
 
 // This method is called when your extension is activated

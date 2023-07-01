@@ -49,12 +49,14 @@ const internalVideoSources: VideoSource[] = [
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    const userVideoSources: VideoSource[] = vscode.workspace.getConfiguration().get("subway-surfers.customSources") || [];
-    const videoSources = internalVideoSources.concat(userVideoSources);
-    // The command has been defined in the package.json file
+	// The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
     const disposable = vscode.commands.registerCommand("subway-surfers.overstimulate", () => {
+		const configuration = vscode.workspace.getConfiguration();
+		const userVideoSources: VideoSource[] = configuration.get("subway-surfers.customSources") || [];
+		const invidiousInstance: string = configuration.get("subway-surfers.invidiousInstance") || "yt.artemislena.eu";
+		const videoSources = internalVideoSources.concat(userVideoSources);
         const items: vscode.QuickPickItem[] = videoSources.map((source) => {
             return {
                 label: source.label,
@@ -85,7 +87,8 @@ export function activate(context: vscode.ExtensionContext) {
             const html = template
                 .replace(/WIDTH/g, source.width.toString())
                 .replace(/VIDEOS/g, JSON.stringify(source.videos.sort(() => 0.5 - Math.random()))) // Shuffle the videos array
-                .replace(/MUTED/g, source.muted ? "muted" : "") 
+				.replace(/MUTED/g, source.muted ? "muted" : "")
+				.replace(/INVIDIOUS_INSTANCE/g, JSON.stringify(invidiousInstance))
                 .trim();
 
             panel.reveal();

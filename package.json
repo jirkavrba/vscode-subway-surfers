@@ -54,6 +54,11 @@
               }
             }
           }
+        },
+        "subway-surfers.invidiousInstance": {
+          "type": "string",
+          "description": "A custom invidious instance url to use",
+          "default": "yt.artemislena.eu"
         }
       }
     }

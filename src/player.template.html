@@ -24,16 +24,17 @@
         </style>
         <script>
             const videos = VIDEOS;
+			const invidiousInstance = INVIDIOUS_INSTANCE;
 
             let current = 0;
 
             document.addEventListener("DOMContentLoaded", (event) => {
                 const video = document.getElementById("video-player");
                 const source = document.getElementById("video-source");
-
+				
                 const playNext = () => {
                     current = (current + 1) % videos.length;
-                    source.src = `https://yewtu.be/latest_version?id=${videos[current]}&amp;itag=22#t=60"`;
+                    source.src = new URL(`latest_version?id=${videos[current]}&amp;itag=22#t=60`, `https://${invidiousInstance}`)
                     video.load();
                     video.play();
                 };

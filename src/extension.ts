@@ -27,6 +27,7 @@ const internalVideoSources: VideoSource[] = [
         label: "Family Guy Clips",
         videos: ["y5a0ljo-ocI", "Zxl28UgHpn0", "mn-Tlb_wfjc", "fytR78K6rHs"],
         width: 600,
+        muted: true
     },
     // {
     //     label: "Better Call Saul Clips",
@@ -61,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
     const disposable = vscode.commands.registerCommand("subway-surfers.overstimulate", () => {
 		const configuration = vscode.workspace.getConfiguration();
 		const userVideoSources: VideoSource[] = configuration.get("subway-surfers.customSources") || [];
-		const invidiousInstance: string = configuration.get("subway-surfers.invidiousInstance") || "yt.artemislena.eu";
+		const invidiousInstance: string = configuration.get("subway-surfers.invidiousInstance") || "vid.puffyan.us";
 		const videoSources = internalVideoSources.concat(userVideoSources);
         const items: vscode.QuickPickItem[] = videoSources.map((source) => {
             return {

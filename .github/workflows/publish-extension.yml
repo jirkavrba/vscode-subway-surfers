@@ -1,0 +1,31 @@
+name: "Publish VS Code extension"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Login to VSCE
+        run: echo "${{ secrets.MARKETPLACE_TOKEN }}" | npx vsce login jirkavrba
+
+      - name: Build package
+        run: npx vsce package
+
+      - name: Publish package
+        run: npx vsce publish
+on:
+  push:
+    branches: 
+      - main

@@ -13,7 +13,7 @@ type VideoSource = {
 const internalVideoSources: VideoSource[] = [
     {
         label: "Subway Surfers",
-        videos: ["nNGQ7kMhGuQ", "Tqne5J7XdPA", "hs7Z0JUgDeA", "iYgYfHb8gbQ"],
+        videos: ["nNGQ7kMhGuQ", "Tqne5J7XdPA", "hs7Z0JUgDeA"],
         width: 300,
         muted: true,
     },

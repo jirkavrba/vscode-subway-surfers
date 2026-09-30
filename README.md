@@ -1,12 +1,6 @@
 # Subway Surfers in your VS Code
 
-## To activate this extension use the `This code boring ah hell 💀` command from the command palette (`Ctrl + Shift + P` / `⇧ ⌘ P`)
+> [!IMPORTANT]  
+> Because of issues with loading videos and the fact that I am no longer using VS Code, I've decided to unpublish the extension on VS Code marketplace
 
 ![VS Code Subway Surfers](https://i.imgur.com/IAYr09o.png)
-
-
-## Many thanks to
-
-- [@Abb1x](https://github.com/Abb1x) for adding Minecraft parkour videos!
-- [@styxpilled](https://github.com/styxpilled) for adding Better Call Saul best moments
-- [@paolomartinez](https://github.com/paolomartinez) for adding Family Guy best moments

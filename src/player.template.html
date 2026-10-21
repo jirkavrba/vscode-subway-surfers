@@ -1,55 +1,267 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none'; img-src https: http: data: blob:; style-src 'unsafe-inline' https:; script-src 'unsafe-inline' 'unsafe-eval' https: http:; connect-src https: http: wss: data: blob:; media-src https: http: data: blob:; frame-src https: http: data: blob:; font-src https: data:;"
+        />
         <style>
-            #video {
-                display: flex;
-                flex-flow: column nowrap;
-                justify-content: center;
-                align-items: center;
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body,
+            html {
                 width: 100%;
                 height: 100%;
+                overflow: hidden;
+                background-color: var(--vscode-editor-background, #1e1e1e);
+                color: var(--vscode-editor-foreground, #cccccc);
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
 
-            button {
-                margin-top: 1em;
-                border: 1px solid black;
-                background-color: black;
-                padding: 1em;
-                border-radius: 20px;
-                color: white;
+            #container {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #000000;
+            }
+
+            #player-wrapper {
+                position: relative;
+                width: 100%;
+                max-width: WIDTHpx;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #000000;
+            }
+
+            #player-wrapper.fill-mode {
+                max-width: 100% !important;
+            }
+
+            #player-iframe,
+            #game-frame {
+                width: 100%;
+                height: 100%;
+                border: none;
+                display: block;
+            }
+
+            #controls {
+                position: absolute;
+                bottom: 16px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: rgba(20, 20, 20, 0.85);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                padding: 6px 14px;
+                border-radius: 30px;
+                opacity: 0;
+                transition: opacity 0.25s ease, transform 0.25s ease;
+                z-index: 100;
+                pointer-events: auto;
+            }
+
+            #container:hover #controls,
+            #controls:focus-within {
+                opacity: 1;
+            }
+
+            .ctrl-btn {
+                background: rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: #ffffff;
+                padding: 6px 12px;
+                border-radius: 16px;
+                font-size: 12px;
+                font-weight: 500;
                 cursor: pointer;
+                user-select: none;
+                transition: all 0.15s ease;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                white-space: nowrap;
+            }
+
+            .ctrl-btn:hover {
+                background: rgba(255, 255, 255, 0.25);
+                transform: scale(1.04);
+            }
+
+            .ctrl-btn:active {
+                transform: scale(0.96);
+            }
+
+            #status-toast {
+                position: absolute;
+                top: 14px;
+                background: rgba(0, 0, 0, 0.75);
+                color: #ffffff;
+                font-size: 12px;
+                padding: 5px 12px;
+                border-radius: 14px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 110;
+            }
+
+            #status-toast.visible {
+                opacity: 1;
             }
         </style>
-        <script>
-            const videos = VIDEOS;
-			const invidiousInstance = INVIDIOUS_INSTANCE;
-
-            let current = 0;
-
-            document.addEventListener("DOMContentLoaded", (event) => {
-                const video = document.getElementById("video-player");
-                const source = document.getElementById("video-source");
-				
-                const playNext = () => {
-                    current = (current + 1) % videos.length;
-                    source.src = new URL(`latest_version?id=${videos[current]}&amp;itag=22#t=60`, `https://${invidiousInstance}`)
-                    video.load();
-                    video.play();
-                };
-
-                video.addEventListener("ended", playNext);
-                source.addEventListener("error", playNext);
-                playNext();
-            });
-        </script>
     </head>
     <body>
-        <div id="video">
-            <video id="video-player" autoplay loop muted controls width="WIDTH">
-                <source id="video-source"/>
-            </video>
+        <div id="container">
+            <div id="status-toast"></div>
+            <div id="player-wrapper">
+                <iframe
+                    id="player-iframe"
+                    allow="autoplay; encrypted-media; picture-in-picture; clipboard-write; fullscreen"
+                    allowfullscreen
+                ></iframe>
+            </div>
+            <div id="controls">
+                <button class="ctrl-btn" id="prev-btn" title="Previous Video">⏮ Prev</button>
+                <button class="ctrl-btn" id="next-btn" title="Next Video">⏭ Next</button>
+                <button class="ctrl-btn" id="mute-btn" title="Toggle Mute">🔇 Muted</button>
+                <button class="ctrl-btn" id="fit-btn" title="Toggle Width Mode">↔ Fit</button>
+            </div>
         </div>
+
+        <script>
+            (function () {
+                const serverPort = SERVER_PORT;
+                const rawVideos = VIDEOS;
+                const isMutedDefault = Boolean(MUTED);
+                const gameUrl = GAME_URL;
+                const videos = Array.isArray(rawVideos) && rawVideos.length > 0 ? rawVideos : ["nNGQ7kMhGuQ"];
+
+                let current = 0;
+                let isMuted = isMutedDefault;
+                let isFillMode = false;
+
+                const toast = document.getElementById("status-toast");
+                const wrapper = document.getElementById("player-wrapper");
+                const controls = document.getElementById("controls");
+                const iframe = document.getElementById("player-iframe");
+                const prevBtn = document.getElementById("prev-btn");
+                const nextBtn = document.getElementById("next-btn");
+                const muteBtn = document.getElementById("mute-btn");
+                const fitBtn = document.getElementById("fit-btn");
+
+                function showToast(text, durationMs = 2000) {
+                    if (!toast) return;
+                    toast.innerText = text;
+                    toast.classList.add("visible");
+                    setTimeout(() => {
+                        toast.classList.remove("visible");
+                    }, durationMs);
+                }
+
+                if (gameUrl && gameUrl.length > 0) {
+                    controls.style.display = "none";
+                    wrapper.innerHTML =
+                        '<iframe id="game-frame" src="' +
+                        gameUrl +
+                        '" allow="autoplay; fullscreen; keyboard; gamepad" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>';
+                    return;
+                }
+
+                function getEmbedUrl(videoId, muted) {
+                    if (serverPort && serverPort > 0) {
+                        return (
+                            "http://127.0.0.1:" +
+                            serverPort +
+                            "/yt-embed?v=" +
+                            videoId +
+                            "&muted=" +
+                            (muted ? "1" : "0") +
+                            "&autoplay=1"
+                        );
+                    }
+                    return (
+                        "https://www.youtube-nocookie.com/embed/" +
+                        videoId +
+                        "?autoplay=1&mute=" +
+                        (muted ? "1" : "0") +
+                        "&controls=1&loop=1&playlist=" +
+                        videoId +
+                        "&playsinline=1&rel=0&modestbranding=1"
+                    );
+                }
+
+                function loadVideoIndex(index) {
+                    current = (index + videos.length) % videos.length;
+                    const videoId = videos[current];
+                    const url = getEmbedUrl(videoId, isMuted);
+                    if (iframe) {
+                        iframe.src = url;
+                    }
+                    showToast("Playing video " + (current + 1) + " of " + videos.length);
+                }
+
+                function playNext() {
+                    loadVideoIndex(current + 1);
+                }
+
+                function playPrev() {
+                    loadVideoIndex(current - 1);
+                }
+
+                function updateMuteBtnText() {
+                    muteBtn.innerText = isMuted ? "🔇 Muted" : "🔊 Sound";
+                }
+
+                function toggleMute() {
+                    isMuted = !isMuted;
+                    updateMuteBtnText();
+                    loadVideoIndex(current);
+                    showToast(isMuted ? "Audio Muted" : "Audio Enabled");
+                }
+
+                function toggleFit() {
+                    isFillMode = !isFillMode;
+                    if (isFillMode) {
+                        wrapper.classList.add("fill-mode");
+                        fitBtn.innerText = "↔ Portrait";
+                    } else {
+                        wrapper.classList.remove("fill-mode");
+                        fitBtn.innerText = "↔ Fit";
+                    }
+                }
+
+                nextBtn.addEventListener("click", playNext);
+                prevBtn.addEventListener("click", playPrev);
+                muteBtn.addEventListener("click", toggleMute);
+                fitBtn.addEventListener("click", toggleFit);
+                updateMuteBtnText();
+
+                // Initial load
+                loadVideoIndex(0);
+            })();
+        </script>
     </body>
 </html>

@@ -2,7 +2,7 @@
   "name": "subway-surfers",
   "displayName": "Subway Surfers",
   "description": "The Industrial Revolution and its consequences have been a disaster for the human race.",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "engines": {
     "vscode": "^1.69.0"
   },
@@ -24,41 +24,52 @@
     "configuration": {
       "title": "Subway Surfers",
       "properties": {
+        "subway-surfers.defaultMuted": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether videos start muted by default (recommended for browser autoplay compliance)"
+        },
         "subway-surfers.customSources": {
           "type": "array",
           "items": {
             "type": "object",
-            "description": "Custom sources",
+            "description": "Custom video sources",
             "required": [
-              "label",
-              "videos",
-              "width"
+              "label"
             ],
             "properties": {
               "label": {
                 "type": "string",
                 "description": "Name of the video source"
               },
+              "description": {
+                "type": "string",
+                "description": "Short description of the source"
+              },
               "videos": {
                 "type": "array",
                 "items": {
                   "type": "string"
                 },
-                "description": "List of Youtube ID's",
+                "description": "List of YouTube Video IDs",
                 "default": []
+              },
+              "gameUrl": {
+                "type": "string",
+                "description": "Optional web URL to an interactive HTML5 game frame"
               },
               "width": {
                 "type": "number",
-                "description": "The width you want the video to be in pixels",
-                "default": 300
+                "description": "The width of the video player in pixels (e.g. 320 for portrait, 600 for 16:9)",
+                "default": 320
+              },
+              "muted": {
+                "type": "boolean",
+                "description": "Whether this source starts muted",
+                "default": true
               }
             }
           }
-        },
-        "subway-surfers.invidiousInstance": {
-          "type": "string",
-          "description": "A custom invidious instance url to use",
-          "default": "yt.drgnz.club"
         }
       }
     }
